@@ -33,8 +33,13 @@ springdoc:
       name: Arthur Santana
       email: arthurgn.santana@gmail.com
 
-# Configurações JWT
+# ConfiguraÃ§Ãµes JWT
 jwt:
   secret: 7JU9or21W3WnuZ+QnIu/Ksl6V1uGvfX3E5WvhT+Un2Qn+WXzKsX6GRHuJ+ho7AKt
   expirationAccessToken: 3600000  # 1 hora em milissegundos
   expirationRefreshToken: 604800000  # 7 dias em milissegundos
+
+# Clients configuration
+clients:
+  service:
+    url: http://localhost:8081/api
