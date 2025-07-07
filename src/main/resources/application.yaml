@@ -41,5 +41,5 @@ jwt:
 
 # Clients configuration
 clients:
-  service:
+  ecomm-service:
     url: http://localhost:8081/api
