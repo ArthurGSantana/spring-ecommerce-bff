@@ -1,4 +1,4 @@
-package com.ags.spring_ecommerce_bff.config;
+package com.ags.spring_ecommerce_bff.config.security;
 
 import com.ags.spring_ecommerce_bff.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
