@@ -1,6 +1,6 @@
 package com.ags.spring_ecommerce_bff.filter;
 
-import com.ags.spring_ecommerce_bff.config.JwtConfig;
+import com.ags.spring_ecommerce_bff.config.security.JwtConfig;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
