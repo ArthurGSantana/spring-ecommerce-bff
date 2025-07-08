@@ -4,7 +4,6 @@ import com.ags.spring_ecommerce_bff.enums.UserRoleEnum;
 import com.ags.spring_ecommerce_bff.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -16,8 +16,8 @@ public class UserController {
   private final UserService userService;
 
   @GetMapping
-    @Operation(summary = "Get all users", description = "Fetch a list of all users in the system")
-    public ResponseEntity<Iterable<UserDto>> getAllUsers() {
+  @Operation(summary = "Get all users", description = "Fetch a list of all users in the system")
+  public ResponseEntity<Iterable<UserDto>> getAllUsers() {
     var users = userService.getAllUsers();
     return ResponseEntity.ok(users);
   }
