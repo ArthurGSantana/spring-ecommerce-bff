@@ -39,9 +39,9 @@ public class UserService {
     var users = userRepository.findAll();
 
     return users.stream()
-            .map(user -> objectMapper.convertValue(user, UserDto.class))
-            .peek(userDto -> userDto.setPassword(null))
-            .toList();
+        .map(user -> objectMapper.convertValue(user, UserDto.class))
+        .peek(userDto -> userDto.setPassword(null))
+        .toList();
   }
 
   public UserDto createUser(UserDto userDto) {
@@ -53,5 +53,21 @@ public class UserService {
         createdUser.getEmail());
 
     return createdUser;
+  }
+
+  public UserDto updateUser(UUID id, UserDto userDto) {
+    var updatedUser = ecommerceServiceClient.updateUser(userDto, id);
+
+    log.info(
+        "User updated successfully with ID: {} for email: {}",
+        updatedUser.getId(),
+        updatedUser.getEmail());
+
+    return updatedUser;
+  }
+
+  public void deleteUserById(UUID id) {
+    ecommerceServiceClient.deleteUserById(id);
+    log.info("User with ID {} deleted successfully", id);
   }
 }

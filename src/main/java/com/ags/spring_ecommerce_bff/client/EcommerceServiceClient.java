@@ -4,9 +4,9 @@ import com.ags.spring_ecommerce_bff.config.feign.FeignClientConfig;
 import com.ags.spring_ecommerce_bff.dto.UserDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(
     name = "ecommerce-service",
@@ -21,4 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface EcommerceServiceClient {
   @PostMapping("/user")
   UserDto createUser(@RequestBody UserDto userDto);
+
+  @PutMapping("/user/{id}")
+  UserDto updateUser(@RequestBody UserDto userDto, @PathVariable UUID id);
+
+  @DeleteMapping("/user/{id}")
+  void deleteUserById(@PathVariable UUID id);
 }
