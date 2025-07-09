@@ -1,8 +1,9 @@
 package com.ags.spring_ecommerce_bff.service;
 
 import com.ags.spring_ecommerce_bff.client.EcommerceServiceClient;
-import com.ags.spring_ecommerce_bff.dto.UserDto;
-import com.ags.spring_ecommerce_bff.exception.NotFoundException;
+import com.ags.spring_ecommerce_bff.dto.request.UserRequestDto;
+import com.ags.spring_ecommerce_bff.dto.response.UserResponseDto;
+import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
 import com.ags.spring_ecommerce_bff.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -19,32 +20,32 @@ public class UserService {
   private final ObjectMapper objectMapper;
   private final EcommerceServiceClient ecommerceServiceClient;
 
-  public UserDto getUserById(UUID id) {
+  public UserResponseDto getUserById(UUID id) {
     log.info("Fetching user with ID {}", id);
 
     var user =
         userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
 
-    var userDto = objectMapper.convertValue(user, UserDto.class);
-    userDto.setPassword(null);
+    var userDto = objectMapper.convertValue(user, UserResponseDto.class);
 
     log.info("User with ID {} fetched successfully", id);
 
     return userDto;
   }
 
-  public List<UserDto> getAllUsers() {
+  public List<UserResponseDto> getAllUsers() {
     log.info("Fetching all users");
 
     var users = userRepository.findAll();
 
     return users.stream()
-        .map(user -> objectMapper.convertValue(user, UserDto.class))
-        .peek(userDto -> userDto.setPassword(null))
+        .map(user -> objectMapper.convertValue(user, UserResponseDto.class))
+        //        .peek(userDto -> userDto.setPassword(null)) //peek is used for substituting values
+        // in a stream
         .toList();
   }
 
-  public UserDto createUser(UserDto userDto) {
+  public UserResponseDto createUser(UserRequestDto userDto) {
     var createdUser = ecommerceServiceClient.createUser(userDto);
 
     log.info(
@@ -52,10 +53,10 @@ public class UserService {
         createdUser.getId(),
         createdUser.getEmail());
 
-    return createdUser;
+    return objectMapper.convertValue(createdUser, UserResponseDto.class);
   }
 
-  public UserDto updateUser(UUID id, UserDto userDto) {
+  public UserResponseDto updateUser(UUID id, UserRequestDto userDto) {
     var updatedUser = ecommerceServiceClient.updateUser(userDto, id);
 
     log.info(
@@ -63,7 +64,7 @@ public class UserService {
         updatedUser.getId(),
         updatedUser.getEmail());
 
-    return updatedUser;
+    return objectMapper.convertValue(updatedUser, UserResponseDto.class);
   }
 
   public void deleteUserById(UUID id) {

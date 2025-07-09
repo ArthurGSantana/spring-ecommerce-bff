@@ -1,4 +1,4 @@
-package com.ags.spring_ecommerce_bff.dto;
+package com.ags.spring_ecommerce_bff.dto.request;
 
 import com.ags.spring_ecommerce_bff.enums.UserRoleEnum;
 import com.ags.spring_ecommerce_bff.enums.UserStatusEnum;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class UserRequestDto {
   private UUID id;
 
   @NotBlank(message = "Name is required")

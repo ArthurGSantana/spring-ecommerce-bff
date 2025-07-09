@@ -1,6 +1,6 @@
 package com.ags.spring_ecommerce_bff.config.feign;
 
-import com.ags.spring_ecommerce_bff.exception.NotFoundException;
+import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
 import feign.Client;
 import feign.codec.ErrorDecoder;
 import java.util.concurrent.TimeUnit;
