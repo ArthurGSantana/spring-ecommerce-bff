@@ -1,5 +1,11 @@
-package com.ags.spring_ecommerce_bff.exception;
+package com.ags.spring_ecommerce_bff.exception.handler;
 
+import com.ags.spring_ecommerce_bff.exception.errors.InvalidCredentialsException;
+import com.ags.spring_ecommerce_bff.exception.errors.JwtAuthenticationException;
+import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
+import com.ags.spring_ecommerce_bff.exception.errors.ValidationException;
+import com.ags.spring_ecommerce_bff.exception.models.ErrorResponse;
+import com.ags.spring_ecommerce_bff.exception.models.ErrorType;
 import jakarta.persistence.EntityNotFoundException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -69,6 +75,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
     log.warn("Access denied: {}", ex.getMessage());
     return buildErrorResponse(ErrorType.ACCESS_DENIED, "Access denied");
+  }
+
+  @ExceptionHandler(InvalidCredentialsException.class)
+  public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
+    log.warn("Invalid credentials: {}", ex.getMessage());
+    return buildErrorResponse(ErrorType.UNAUTHORIZED, "Invalid credentials");
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,4 +1,4 @@
-package com.ags.spring_ecommerce_bff.exception;
+package com.ags.spring_ecommerce_bff.exception.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.ags.spring_ecommerce_bff.exception;
+package com.ags.spring_ecommerce_bff.exception.models;
 
 import java.time.LocalDateTime;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.ags.spring_ecommerce_bff.exception;
+package com.ags.spring_ecommerce_bff.exception.errors;
 
 public class ValidationException extends RuntimeException {
   public ValidationException(String message) {
