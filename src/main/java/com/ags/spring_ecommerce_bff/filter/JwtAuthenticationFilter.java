@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,12 +24,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @RequiredArgsConstructor
+@SuppressWarnings("unchecked")
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final JwtConfig jwtConfig;
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      HttpServletRequest request,
+      @NotNull HttpServletResponse response,
+      @NotNull FilterChain filterChain)
       throws ServletException, IOException {
 
     String authHeader = request.getHeader("Authorization");
@@ -52,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         throw new JwtException("Token inválido");
       }
 
-      @SuppressWarnings("unchecked")
       List<String> roles = (List<String>) claims.getOrDefault("roles", Collections.emptyList());
 
       var authorities =
