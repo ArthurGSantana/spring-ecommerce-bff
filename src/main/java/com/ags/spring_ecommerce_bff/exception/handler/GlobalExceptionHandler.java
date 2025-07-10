@@ -6,6 +6,7 @@ import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
 import com.ags.spring_ecommerce_bff.exception.errors.ValidationException;
 import com.ags.spring_ecommerce_bff.exception.models.ErrorResponse;
 import com.ags.spring_ecommerce_bff.exception.models.ErrorType;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.EntityNotFoundException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -81,6 +83,19 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
     log.warn("Invalid credentials: {}", ex.getMessage());
     return buildErrorResponse(ErrorType.UNAUTHORIZED, "Invalid credentials");
+  }
+
+  @ExceptionHandler(InvalidFormatException.class)
+  public ResponseEntity<ErrorResponse> handleInvalidFormat(InvalidFormatException ex) {
+    log.error("Invalid format: {}", ex.getMessage());
+    return buildErrorResponse(ErrorType.VALIDATION_ERROR, "Invalid data format");
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(
+      HttpMessageNotReadableException ex) {
+    log.error("HTTP message not readable: {}", ex.getMessage());
+    return buildErrorResponse(ErrorType.VALIDATION_ERROR, "Malformed JSON request");
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

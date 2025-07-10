@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
               .collect(Collectors.toList());
 
       // Criar o objeto Authentication
-      var authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+      var authentication = new UsernamePasswordAuthenticationToken(username, token, authorities);
 
       // Definir a autenticação no contexto de segurança
       SecurityContextHolder.getContext().setAuthentication(authentication);
