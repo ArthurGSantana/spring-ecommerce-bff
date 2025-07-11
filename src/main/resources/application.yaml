@@ -84,9 +84,9 @@ resilience4j:
         exponential-backoff-multiplier: 2
         ignore-exceptions:
           - java.lang.IllegalArgumentException
-#        retry-exceptions:
-#          - org.springframework.web.client.RestClientException
-#          - feign.FeignException
+        retry-exceptions:
+          - org.springframework.web.client.RestClientException
+          - feign.FeignException
 
 #  timelimiter:
 #    instances:
