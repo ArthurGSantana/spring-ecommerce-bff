@@ -1,6 +1,7 @@
 package com.ags.spring_ecommerce_bff.controller;
 
 import com.ags.spring_ecommerce_bff.dto.request.AuthRequestDto;
+import com.ags.spring_ecommerce_bff.dto.request.RefreshTokenRequest;
 import com.ags.spring_ecommerce_bff.dto.response.AuthResponseDto;
 import com.ags.spring_ecommerce_bff.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,5 +29,11 @@ public class AuthController {
       @Valid @RequestBody AuthRequestDto authRequest) {
     var authResponse = authService.authenticateUser(authRequest);
     return ResponseEntity.ok(authResponse);
+  }
+
+  @PostMapping("/refresh")
+  public ResponseEntity<AuthResponseDto> refresh(@RequestBody RefreshTokenRequest request) {
+    AuthResponseDto response = authService.refreshToken(request.getRefreshToken());
+    return ResponseEntity.ok(response);
   }
 }

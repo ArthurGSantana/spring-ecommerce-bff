@@ -1,9 +1,15 @@
 package com.ags.spring_ecommerce_bff.service;
 
+import com.ags.spring_ecommerce_bff.config.security.JwtConfig;
 import com.ags.spring_ecommerce_bff.dto.request.AuthRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.AuthResponseDto;
+import com.ags.spring_ecommerce_bff.entity.User;
 import com.ags.spring_ecommerce_bff.exception.errors.InvalidCredentialsException;
 import com.ags.spring_ecommerce_bff.repository.UserRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +20,7 @@ public class AuthService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final TokenService tokenService;
+  private final JwtConfig jwtConfig;
 
   public AuthResponseDto authenticateUser(AuthRequestDto authDto) {
     var user =
@@ -37,5 +44,34 @@ public class AuthService {
 
   private Boolean isAuthenticated(String loginPassword, String userPassword) {
     return passwordEncoder.matches(loginPassword, userPassword);
+  }
+
+  public AuthResponseDto refreshToken(String refreshToken) {
+    SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()));
+
+    try {
+      var claims =
+          Jwts.parser().verifyWith(key).build().parseSignedClaims(refreshToken).getPayload();
+
+      String tokenType = claims.get("tokenType", String.class);
+      if (!"refresh".equals(tokenType)) {
+        throw new InvalidCredentialsException("Token inválido");
+      }
+
+      String userEmail = claims.getSubject();
+      User user =
+          userRepository
+              .findByEmail(userEmail)
+              .orElseThrow(() -> new InvalidCredentialsException("Usuário não encontrado"));
+
+      return AuthResponseDto.builder()
+          .name(user.getEmail())
+          .accessToken(tokenService.generateAccessToken(user))
+          .refreshToken(tokenService.generateRefreshToken(user))
+          .build();
+
+    } catch (Exception e) {
+      throw new InvalidCredentialsException("Token de atualização inválido ou expirado");
+    }
   }
 }
