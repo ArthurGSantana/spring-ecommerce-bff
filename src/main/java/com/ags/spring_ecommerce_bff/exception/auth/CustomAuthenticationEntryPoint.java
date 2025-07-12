@@ -23,10 +23,16 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
       AuthenticationException authException)
       throws IOException, ServletException {
 
+    var message =
+        "Authentication failed: "
+            + (authException.getMessage() != null
+                ? authException.getMessage()
+                : "You must be authenticated to access this resource");
+
     Map<String, Object> body = new HashMap<>();
     body.put("status", HttpStatus.UNAUTHORIZED.value());
     body.put("error", "Not authenticated");
-    body.put("message", "You must be authenticated to access this resource");
+    body.put("message", message);
     body.put("path", request.getServletPath());
 
     response.setStatus(HttpStatus.UNAUTHORIZED.value());

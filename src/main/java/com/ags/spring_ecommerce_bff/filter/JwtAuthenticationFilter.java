@@ -51,18 +51,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
       var claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
 
-      String userEmail = claims.getSubject();
-      String tokenType = claims.get("tokenType", String.class);
+      var userEmail = claims.getSubject();
+      var tokenType = claims.get("tokenType", String.class);
       var userId = UUID.fromString(claims.get("userId", String.class));
+      var tokenId = claims.getId();
 
       // Verificar se é um token de acesso (não de refresh)
       if (!"access".equals(tokenType)) {
-        throw new JwtException("Token inválido");
+        throw new JwtException("Invalid token");
       }
 
       // Verificar se o usuário está ativo
-      var session = sessionService.getSession(userId);
-      if (session.isEmpty()) throw new JwtException("Sessão inválida ou expirada");
+      var session =
+          sessionService
+              .getSession(userId)
+              .orElseThrow(() -> new JwtException("Invalid or expired session"));
+      if (!session.getTokenId().equals(tokenId)) {
+        throw new JwtException("Invalid or expired session");
+      }
 
       // Atualizar última atividade
       sessionService.updateLastActivity(userId);

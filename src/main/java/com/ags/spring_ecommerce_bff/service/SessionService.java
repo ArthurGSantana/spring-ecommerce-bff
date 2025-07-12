@@ -21,15 +21,16 @@ public class SessionService {
   private static final String SESSION_PREFIX = "user:session:";
   private static final String REFRESH_TOKEN_PREFIX = "refresh:token:";
 
-  public void createSession(User user, String refreshTokenId) {
+  public void createSession(User user, String tokenId) {
     UserSessionDto session =
-        new UserSessionDto(
-            user.getId(),
-            user.getEmail(),
-            user.getName(),
-            user.getRole(),
-            new Date(),
-            refreshTokenId);
+        UserSessionDto.builder()
+            .userId(user.getId())
+            .email(user.getEmail())
+            .name(user.getName())
+            .role(user.getRole())
+            .lastActivity(new Date())
+            .tokenId(tokenId)
+            .build();
 
     String sessionKey = SESSION_PREFIX + user.getId();
     redisTemplate
@@ -37,7 +38,7 @@ public class SessionService {
         .set(sessionKey, session, Duration.ofMillis(jwtConfig.getExpirationRefreshToken()));
 
     // Mapear refresh token ID para user ID
-    String refreshKey = REFRESH_TOKEN_PREFIX + refreshTokenId;
+    String refreshKey = REFRESH_TOKEN_PREFIX + tokenId;
     redisTemplate
         .opsForValue()
         .set(refreshKey, user.getId(), Duration.ofMillis(jwtConfig.getExpirationRefreshToken()));
@@ -74,16 +75,10 @@ public class SessionService {
         .ifPresent(
             session -> {
               String sessionKey = SESSION_PREFIX + userId;
-              String refreshKey = REFRESH_TOKEN_PREFIX + session.getRefreshTokenId();
+              String refreshKey = REFRESH_TOKEN_PREFIX + session.getTokenId();
 
               redisTemplate.delete(sessionKey);
               redisTemplate.delete(refreshKey);
             });
-  }
-
-  public Optional<String> getUserIdByRefreshToken(String refreshTokenId) {
-    String refreshKey = REFRESH_TOKEN_PREFIX + refreshTokenId;
-    String userId = (String) redisTemplate.opsForValue().get(refreshKey);
-    return Optional.ofNullable(userId);
   }
 }

@@ -44,7 +44,7 @@ public class TokenService {
 
     var refreshToken =
         Jwts.builder()
-            .subject(user.getName())
+            .subject(user.getEmail())
             .issuedAt(now)
             .expiration(expiryDate)
             .id(tokenId)

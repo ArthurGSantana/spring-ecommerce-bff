@@ -69,7 +69,7 @@ public class AuthService {
 
       var tokenId = claims.getId();
       Optional<UserSessionDto> session = sessionService.getSession(user.getId());
-      if (session.isEmpty() || !session.get().getRefreshTokenId().equals(tokenId)) {
+      if (session.isEmpty() || !session.get().getTokenId().equals(tokenId)) {
         throw new InvalidCredentialsException("Sessão inválida ou expirada");
       }
 
