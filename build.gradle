@@ -55,6 +55,10 @@ dependencies {
 	// Resilience4j
 	implementation 'io.github.resilience4j:resilience4j-spring-boot3'
 	implementation 'io.github.resilience4j:resilience4j-feign'
+
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 // Configuração do Spotless
