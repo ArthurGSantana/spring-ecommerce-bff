@@ -16,6 +16,17 @@ spring:
     open-in-view: false
     generate-ddl: false
 
+  redis:
+    host: localhost
+    port: 6379
+    password: # se houver senha
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
 springdoc:
   api-docs:
     path: /v3/api-docs
