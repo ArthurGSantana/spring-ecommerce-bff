@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenService {
   private final JwtConfig jwtConfig;
+  private final SessionService sessionService;
 
   public String generateAccessToken(User user) {
     SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()));
@@ -24,7 +25,7 @@ public class TokenService {
     Date expiryDate = new Date(now.getTime() + jwtConfig.getExpirationAccessToken());
 
     return Jwts.builder()
-        .subject(user.getName())
+        .subject(user.getEmail())
         .issuedAt(now)
         .expiration(expiryDate)
         .claim("userId", user.getId())
@@ -39,15 +40,28 @@ public class TokenService {
 
     Date now = new Date();
     Date expiryDate = new Date(now.getTime() + jwtConfig.getExpirationRefreshToken());
+    String tokenId = UUID.randomUUID().toString();
 
-    return Jwts.builder()
+    var refreshToken = Jwts.builder()
         .subject(user.getName())
         .issuedAt(now)
         .expiration(expiryDate)
-        .id(UUID.randomUUID().toString())
+        .id(tokenId)
         .claim("userId", user.getId())
         .claim("tokenType", "refresh")
         .signWith(key)
         .compact();
+
+    sessionService.createSession(user, tokenId);
+
+    return refreshToken;
+  }
+
+  public UUID extractUserIdFromToken(String token) {
+    SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()));
+
+    var claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+
+    return UUID.fromString(claims.get("userId", String.class));
   }
 }

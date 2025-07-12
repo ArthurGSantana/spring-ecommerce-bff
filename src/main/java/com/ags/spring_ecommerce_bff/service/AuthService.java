@@ -1,6 +1,7 @@
 package com.ags.spring_ecommerce_bff.service;
 
 import com.ags.spring_ecommerce_bff.config.security.JwtConfig;
+import com.ags.spring_ecommerce_bff.dto.internal.UserSessionDto;
 import com.ags.spring_ecommerce_bff.dto.request.AuthRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.AuthResponseDto;
 import com.ags.spring_ecommerce_bff.entity.User;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -21,6 +24,7 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final TokenService tokenService;
   private final JwtConfig jwtConfig;
+  private final SessionService sessionService;
 
   public AuthResponseDto authenticateUser(AuthRequestDto authDto) {
     var user =
@@ -53,16 +57,22 @@ public class AuthService {
       var claims =
           Jwts.parser().verifyWith(key).build().parseSignedClaims(refreshToken).getPayload();
 
-      String tokenType = claims.get("tokenType", String.class);
+      var tokenType = claims.get("tokenType", String.class);
       if (!"refresh".equals(tokenType)) {
         throw new InvalidCredentialsException("Token inválido");
       }
 
-      String userEmail = claims.getSubject();
+      var userEmail = claims.getSubject();
       User user =
           userRepository
               .findByEmail(userEmail)
               .orElseThrow(() -> new InvalidCredentialsException("Usuário não encontrado"));
+
+      var tokenId = claims.getId();
+      Optional<UserSessionDto> session = sessionService.getSession(user.getId());
+      if (session.isEmpty() || !session.get().getRefreshTokenId().equals(tokenId)) {
+        throw new InvalidCredentialsException("Sessão inválida ou expirada");
+      }
 
       return AuthResponseDto.builder()
           .name(user.getEmail())

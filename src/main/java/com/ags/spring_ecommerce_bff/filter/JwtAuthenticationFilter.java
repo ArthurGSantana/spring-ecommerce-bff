@@ -1,6 +1,7 @@
 package com.ags.spring_ecommerce_bff.filter;
 
 import com.ags.spring_ecommerce_bff.config.security.JwtConfig;
+import com.ags.spring_ecommerce_bff.service.SessionService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @SuppressWarnings("unchecked")
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final JwtConfig jwtConfig;
+  private final SessionService sessionService;
 
   @Override
   protected void doFilterInternal(
@@ -48,13 +51,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
       var claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
 
-      String username = claims.getSubject();
+      String userEmail = claims.getSubject();
       String tokenType = claims.get("tokenType", String.class);
+      var userId = UUID.fromString(claims.get("userId", String.class));
 
       // Verificar se é um token de acesso (não de refresh)
       if (!"access".equals(tokenType)) {
         throw new JwtException("Token inválido");
       }
+
+      // Verificar se o usuário está ativo
+     var session = sessionService.getSession(userId);
+      if(session.isEmpty()) throw new JwtException("Sessão inválida ou expirada");
+
+      // Atualizar última atividade
+      sessionService.updateLastActivity(userId);
 
       List<String> roles = (List<String>) claims.getOrDefault("roles", Collections.emptyList());
 
@@ -64,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
               .collect(Collectors.toList());
 
       // Criar o objeto Authentication
-      var authentication = new UsernamePasswordAuthenticationToken(username, token, authorities);
+      var authentication = new UsernamePasswordAuthenticationToken(userEmail, token, authorities);
 
       // Definir a autenticação no contexto de segurança
       SecurityContextHolder.getContext().setAuthentication(authentication);
