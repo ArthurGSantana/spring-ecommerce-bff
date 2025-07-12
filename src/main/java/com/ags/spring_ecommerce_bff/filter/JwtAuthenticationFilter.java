@@ -61,8 +61,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
 
       // Verificar se o usuário está ativo
-     var session = sessionService.getSession(userId);
-      if(session.isEmpty()) throw new JwtException("Sessão inválida ou expirada");
+      var session = sessionService.getSession(userId);
+      if (session.isEmpty()) throw new JwtException("Sessão inválida ou expirada");
 
       // Atualizar última atividade
       sessionService.updateLastActivity(userId);

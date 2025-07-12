@@ -1,11 +1,10 @@
 package com.ags.spring_ecommerce_bff.dto.internal;
 
 import com.ags.spring_ecommerce_bff.enums.UserRoleEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.util.Date;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor

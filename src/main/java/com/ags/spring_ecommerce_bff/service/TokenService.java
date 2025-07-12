@@ -42,15 +42,16 @@ public class TokenService {
     Date expiryDate = new Date(now.getTime() + jwtConfig.getExpirationRefreshToken());
     String tokenId = UUID.randomUUID().toString();
 
-    var refreshToken = Jwts.builder()
-        .subject(user.getName())
-        .issuedAt(now)
-        .expiration(expiryDate)
-        .id(tokenId)
-        .claim("userId", user.getId())
-        .claim("tokenType", "refresh")
-        .signWith(key)
-        .compact();
+    var refreshToken =
+        Jwts.builder()
+            .subject(user.getName())
+            .issuedAt(now)
+            .expiration(expiryDate)
+            .id(tokenId)
+            .claim("userId", user.getId())
+            .claim("tokenType", "refresh")
+            .signWith(key)
+            .compact();
 
     sessionService.createSession(user, tokenId);
 
