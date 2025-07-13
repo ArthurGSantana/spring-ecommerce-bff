@@ -1,6 +1,7 @@
 package com.ags.spring_ecommerce_bff.filter;
 
 import com.ags.spring_ecommerce_bff.config.security.JwtConfig;
+import com.ags.spring_ecommerce_bff.exception.errors.JwtAuthenticationException;
 import com.ags.spring_ecommerce_bff.service.SessionService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -58,16 +59,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
       // Verificar se é um token de acesso (não de refresh)
       if (!"access".equals(tokenType)) {
-        throw new JwtException("Invalid token");
+        throw new JwtAuthenticationException("Invalid token");
       }
 
       // Verificar se o usuário está ativo
       var session =
           sessionService
               .getSession(userId)
-              .orElseThrow(() -> new JwtException("Invalid or expired session"));
+              .orElseThrow(() -> new JwtAuthenticationException("Invalid or expired session"));
       if (!session.getTokenId().equals(tokenId)) {
-        throw new JwtException("Invalid or expired session");
+        throw new JwtAuthenticationException("Invalid or expired session");
       }
 
       // Atualizar última atividade
@@ -89,6 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     } catch (Exception e) {
       // Limpar o contexto de segurança em caso de falha
       SecurityContextHolder.clearContext();
+      throw new JwtAuthenticationException(e.getMessage());
     }
 
     filterChain.doFilter(request, response);
