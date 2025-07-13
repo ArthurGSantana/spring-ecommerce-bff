@@ -21,7 +21,7 @@ public class SessionService {
   private static final String SESSION_PREFIX = "user:session:";
   private static final String REFRESH_TOKEN_PREFIX = "refresh:token:";
 
-  public void createSession(User user, String tokenId) {
+  public void createSession(User user, String tokenId, String refreshTokenId) {
     UserSessionDto session =
         UserSessionDto.builder()
             .userId(user.getId())
@@ -30,6 +30,7 @@ public class SessionService {
             .role(user.getRole())
             .lastActivity(new Date())
             .tokenId(tokenId)
+            .refreshTokenId(refreshTokenId)
             .build();
 
     String sessionKey = SESSION_PREFIX + user.getId();
