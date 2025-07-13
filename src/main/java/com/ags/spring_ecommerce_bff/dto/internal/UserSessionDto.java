@@ -6,9 +6,11 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class UserSessionDto {
   private UUID userId;
@@ -17,4 +19,5 @@ public class UserSessionDto {
   private UserRoleEnum role;
   private Date lastActivity;
   private String tokenId;
+  private String refreshTokenId;
 }
