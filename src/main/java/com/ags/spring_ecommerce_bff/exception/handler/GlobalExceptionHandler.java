@@ -1,9 +1,6 @@
 package com.ags.spring_ecommerce_bff.exception.handler;
 
-import com.ags.spring_ecommerce_bff.exception.errors.InvalidCredentialsException;
-import com.ags.spring_ecommerce_bff.exception.errors.JwtAuthenticationException;
-import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
-import com.ags.spring_ecommerce_bff.exception.errors.ValidationException;
+import com.ags.spring_ecommerce_bff.exception.errors.*;
 import com.ags.spring_ecommerce_bff.exception.models.ErrorResponse;
 import com.ags.spring_ecommerce_bff.exception.models.ErrorType;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -96,6 +93,12 @@ public class GlobalExceptionHandler {
       HttpMessageNotReadableException ex) {
     log.error("HTTP message not readable: {}", ex.getMessage());
     return buildErrorResponse(ErrorType.VALIDATION_ERROR, "Malformed JSON request");
+  }
+
+  @ExceptionHandler(GrpcRequestException.class)
+  public ResponseEntity<ErrorResponse> handleGrpcRequestException(GrpcRequestException ex) {
+    log.error("gRPC request error: {}", ex.getMessage());
+    return buildErrorResponse(ErrorType.INTERNAL_ERROR, ex.getMessage());
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
