@@ -3,7 +3,6 @@ package com.ags.spring_ecommerce_bff.filter;
 import com.ags.spring_ecommerce_bff.config.security.JwtConfig;
 import com.ags.spring_ecommerce_bff.exception.errors.JwtAuthenticationException;
 import com.ags.spring_ecommerce_bff.service.SessionService;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

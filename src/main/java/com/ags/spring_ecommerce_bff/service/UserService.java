@@ -5,11 +5,11 @@ import com.ags.spring_ecommerce_bff.dto.request.UserRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.UserResponseDto;
 import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
 import com.ags.spring_ecommerce_bff.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserService {
   private final UserRepository userRepository;
-  private final ObjectMapper objectMapper;
+  private final ModelMapper modelMapper;
   private final EcommerceServiceClient ecommerceServiceClient;
 
   public UserResponseDto getUserById(UUID id) {
@@ -26,7 +26,7 @@ public class UserService {
     var user =
         userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
 
-    var userDto = objectMapper.convertValue(user, UserResponseDto.class);
+    var userDto = modelMapper.map(user, UserResponseDto.class);
 
     log.info("User with ID {} fetched successfully", id);
 
@@ -39,7 +39,7 @@ public class UserService {
     var users = userRepository.findAll();
 
     return users.stream()
-        .map(user -> objectMapper.convertValue(user, UserResponseDto.class))
+        .map(user -> modelMapper.map(user, UserResponseDto.class))
         //        .peek(userDto -> userDto.setPassword(null)) //peek is used for substituting values
         // in a stream
         .toList();
@@ -53,7 +53,7 @@ public class UserService {
         createdUser.getId(),
         createdUser.getEmail());
 
-    return objectMapper.convertValue(createdUser, UserResponseDto.class);
+    return modelMapper.map(createdUser, UserResponseDto.class);
   }
 
   public UserResponseDto updateUser(UUID id, UserRequestDto userDto) {
@@ -64,7 +64,7 @@ public class UserService {
         updatedUser.getId(),
         updatedUser.getEmail());
 
-    return objectMapper.convertValue(updatedUser, UserResponseDto.class);
+    return modelMapper.map(updatedUser, UserResponseDto.class);
   }
 
   public void deleteUserById(UUID id) {
