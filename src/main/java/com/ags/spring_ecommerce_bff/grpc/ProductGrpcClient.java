@@ -8,6 +8,8 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class ProductGrpcClient {
@@ -49,9 +51,9 @@ public class ProductGrpcClient {
     }
   }
 
-  public void deleteProduct(String productId) throws GrpcRequestException {
+  public void deleteProduct(UUID productId) throws GrpcRequestException {
     try {
-      var request = DeleteProductRequest.newBuilder().setId(productId).build();
+      var request = DeleteProductRequest.newBuilder().setId(productId.toString()).build();
       productServiceStub.deleteProduct(request);
     } catch (Exception e) {
       throw new GrpcRequestException("Failed to delete product: " + e.getMessage(), e);

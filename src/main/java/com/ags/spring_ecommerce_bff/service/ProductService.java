@@ -68,7 +68,7 @@ public class ProductService {
   public void deleteProductById(UUID productId) {
     log.info("Deleting product with ID {}", productId);
 
-    productRepository.deleteById(productId);
+    productGrpcClient.deleteProduct(productId);
 
     log.info("Product with ID {} deleted successfully", productId);
   }

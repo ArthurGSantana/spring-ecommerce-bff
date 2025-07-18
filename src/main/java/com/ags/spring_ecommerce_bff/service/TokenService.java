@@ -11,6 +11,8 @@ import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,5 +69,13 @@ public class TokenService {
     var claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
 
     return UUID.fromString(claims.get("userId", String.class));
+  }
+
+  public String getCurrentToken() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getCredentials() != null) {
+      return authentication.getCredentials().toString();
+    }
+    return null;
   }
 }
