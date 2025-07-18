@@ -1,9 +1,8 @@
 package com.ags.spring_ecommerce_bff.dto.response;
 
 import com.ags.spring_ecommerce_bff.enums.ProductStatusEnum;
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class ProductResponseDto {

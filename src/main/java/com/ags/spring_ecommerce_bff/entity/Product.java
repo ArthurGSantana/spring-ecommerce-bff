@@ -2,13 +2,12 @@ package com.ags.spring_ecommerce_bff.entity;
 
 import com.ags.spring_ecommerce_bff.enums.ProductStatusEnum;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @Entity
 @Table(name = "products")
