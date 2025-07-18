@@ -1,0 +1,55 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+package product;
+option  java_multiple_files = true;
+option java_package = "com.ags.spring_ecommerce_bff.grpc";
+option  java_outer_classname = "ProductProto";
+
+service ProductService {
+  rpc createProduct(CreateProductRequest) returns (CreateProductResponse);
+
+  rpc updateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+
+  rpc deleteProduct(DeleteProductRequest) returns (google.protobuf.Empty);
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string description = 2;
+  double price = 3;
+  int32 stock = 4;
+}
+
+message CreateProductResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 stock = 5;
+  string sku = 6;
+  string status = 7;
+}
+
+message UpdateProductRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 stock = 5;
+  string status = 6;
+}
+
+message UpdateProductResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 stock = 5;
+  string sku = 6;
+  string status = 7;
+}
+
+message DeleteProductRequest {
+  string id = 1;
+}
