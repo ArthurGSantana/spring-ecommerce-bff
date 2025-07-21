@@ -44,7 +44,7 @@ public class ProductController {
   @PutMapping("{id}")
   @Operation(summary = "Update product by ID", description = "Update an existing product's details")
   public ResponseEntity<ProductResponseDto> updateProduct(
-      @PathVariable UUID id, @RequestBody ProductRequestDto productDto) {
+      @PathVariable UUID id, @Valid @RequestBody ProductRequestDto productDto) {
     var updatedProduct = productService.updateProduct(id, productDto);
     return ResponseEntity.ok(updatedProduct);
   }
