@@ -3,12 +3,11 @@ package com.ags.spring_ecommerce_bff.grpc;
 import com.ags.spring_ecommerce_bff.dto.request.ProductRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.ProductResponseDto;
 import com.ags.spring_ecommerce_bff.exception.errors.GrpcRequestException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
