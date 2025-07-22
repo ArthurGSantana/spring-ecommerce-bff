@@ -30,7 +30,12 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+                auth.requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/graphiql",
+                        "/graphql")
                     .permitAll() // Swagger
                     .requestMatchers("/api/auth/**")
                     .permitAll() // Permite acesso público às rotas de autenticação
