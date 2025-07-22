@@ -72,6 +72,10 @@ dependencies {
 //	implementation 'org.springframework.grpc:spring-grpc-spring-boot-starter'
 	testImplementation 'org.springframework.grpc:spring-grpc-test'
 	implementation 'net.devh:grpc-client-spring-boot-starter:2.15.0.RELEASE'
+
+	// GraphQL
+	implementation 'org.springframework.boot:spring-boot-starter-graphql'
+	testImplementation 'org.springframework.graphql:spring-graphql-test'
 }
 
 // Configuração do Spotless
