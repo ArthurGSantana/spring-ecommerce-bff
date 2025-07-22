@@ -33,6 +33,11 @@ spring:
         max-idle: 8
         min-idle: 0
 
+  graphql:
+    graphiql:
+        enabled: true
+        path: /graphql
+
 springdoc:
   api-docs:
     path: /v3/api-docs
