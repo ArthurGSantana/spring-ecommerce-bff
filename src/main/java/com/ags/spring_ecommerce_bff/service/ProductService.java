@@ -65,7 +65,7 @@ public class ProductService {
     return modelMapper.map(updatedProduct, ProductResponseDto.class);
   }
 
-  public void deleteProductById(UUID productId) {
+  public void deleteProduct(UUID productId) {
     log.info("Deleting product with ID {}", productId);
 
     productGrpcClient.deleteProduct(productId);

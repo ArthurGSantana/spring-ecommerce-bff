@@ -31,11 +31,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/graphiql",
-                        "/graphql")
+                        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/graphiql")
                     .permitAll() // Swagger
                     .requestMatchers("/api/auth/**")
                     .permitAll() // Permite acesso público às rotas de autenticação

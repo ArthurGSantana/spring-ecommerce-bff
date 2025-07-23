@@ -52,7 +52,7 @@ public class ProductController {
   @DeleteMapping("{id}")
   @Operation(summary = "Delete product by ID", description = "Remove a product from the system")
   public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
-    productService.deleteProductById(id);
+    productService.deleteProduct(id);
     return ResponseEntity.noContent().build();
   }
 }
