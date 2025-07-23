@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.UUID;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ProductRequestDto {
   private UUID id;
   private String sku;
