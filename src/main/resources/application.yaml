@@ -38,6 +38,31 @@ spring:
         enabled: true
         path: /graphql
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      # Serializador para a chave da mensagem.
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # Serializador para o valor da mensagem.
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+      properties:
+        # Desabilita o cabeçalho 'spring.json.type_id' que o Spring Kafka adiciona por padrão.
+        spring.json.add-type-headers: false
+
+        # Acks (Acknowledge): Define o nível de garantia de entrega da mensagem.
+        # - 0: Produtor não espera por ACK. Mais rápido, menor garantia.
+        # - 1: Produtor espera ACK do líder da partição. Bom equilíbrio entre velocidade e garantia.
+        # - all (ou -1): Produtor espera ACK de todas as réplicas in-sync (ISRs). Mais lento, maior garantia.
+        acks: 1
+
+        # Retries: Número de vezes que o produtor tentará reenviar uma mensagem em caso de falha temporária.
+        retries: 3
+
+        # Tempo em milissegundos para esperar antes de tentar reenviar uma mensagem (se 'retries' > 0).
+        # É bom dar um pequeno atraso para evitar sobrecarregar o broker.
+        retry.backoff.ms: 1000 #
+
 springdoc:
   api-docs:
     path: /v3/api-docs

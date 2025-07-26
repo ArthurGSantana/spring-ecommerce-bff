@@ -76,6 +76,10 @@ dependencies {
 	// GraphQL
 	implementation 'org.springframework.boot:spring-boot-starter-graphql'
 	testImplementation 'org.springframework.graphql:spring-graphql-test'
+
+	// Kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 // Configuração do Spotless
