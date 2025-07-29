@@ -1,7 +1,9 @@
 package com.ags.spring_ecommerce_bff.client;
 
 import com.ags.spring_ecommerce_bff.config.feign.FeignClientConfig;
+import com.ags.spring_ecommerce_bff.dto.request.AddressRequestDto;
 import com.ags.spring_ecommerce_bff.dto.request.UserRequestDto;
+import com.ags.spring_ecommerce_bff.dto.response.AddressResponseDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.util.UUID;
@@ -27,4 +29,14 @@ public interface EcommerceServiceClient {
 
   @DeleteMapping("/user/{id}")
   void deleteUserById(@PathVariable UUID id);
+
+  @PostMapping("/address")
+  AddressResponseDto createAddress(@RequestBody AddressRequestDto addressDto);
+
+  @PutMapping("/address/{id}")
+  AddressResponseDto updateAddress(
+      @RequestBody AddressRequestDto addressDto, @PathVariable UUID id);
+
+  @DeleteMapping("/address/{id}")
+  void deleteAddressById(@PathVariable UUID id);
 }
