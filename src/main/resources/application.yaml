@@ -62,6 +62,8 @@ spring:
         # Tempo em milissegundos para esperar antes de tentar reenviar uma mensagem (se 'retries' > 0).
         # É bom dar um pequeno atraso para evitar sobrecarregar o broker.
         retry.backoff.ms: 1000 #
+    topics:
+        order-create: order-create
 
 springdoc:
   api-docs:
