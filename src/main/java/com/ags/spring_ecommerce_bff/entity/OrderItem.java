@@ -1,9 +1,8 @@
 package com.ags.spring_ecommerce_bff.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.UUID;
+import lombok.*;
 
 @Entity
 @Table(name = "order_items")
@@ -13,8 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class OrderItem {
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)
