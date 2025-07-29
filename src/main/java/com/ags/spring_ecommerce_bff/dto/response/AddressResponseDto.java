@@ -1,9 +1,8 @@
 package com.ags.spring_ecommerce_bff.dto.response;
 
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.UUID;
 
 @Data
 @Builder
@@ -12,5 +11,6 @@ public class AddressResponseDto {
   private String street;
   private String city;
   private String state;
+  private String number;
   private String zipCode;
 }

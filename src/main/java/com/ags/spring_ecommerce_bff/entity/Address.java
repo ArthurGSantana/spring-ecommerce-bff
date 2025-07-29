@@ -1,6 +1,7 @@
 package com.ags.spring_ecommerce_bff.entity;
 
 import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.*;
 
 @Entity
@@ -13,7 +14,7 @@ import lombok.*;
 public class Address {
   @Id
   @Column(name = "id", nullable = false)
-  private String id;
+  private UUID id;
 
   @Column(name = "street", nullable = false)
   private String street;
