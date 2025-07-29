@@ -4,6 +4,7 @@ import com.ags.spring_ecommerce_bff.dto.request.ProductRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.ProductResponseDto;
 import com.ags.spring_ecommerce_bff.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
+@Tag(name = "Product", description = "Product management operations")
 public class ProductController {
   private final ProductService productService;
 

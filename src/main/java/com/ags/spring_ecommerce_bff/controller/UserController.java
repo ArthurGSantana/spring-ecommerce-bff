@@ -4,6 +4,7 @@ import com.ags.spring_ecommerce_bff.dto.request.UserRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.UserResponseDto;
 import com.ags.spring_ecommerce_bff.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@Tag(name = "User", description = "User management operations")
 public class UserController {
   private final UserService userService;
 
