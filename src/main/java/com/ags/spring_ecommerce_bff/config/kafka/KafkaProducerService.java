@@ -1,5 +1,6 @@
 package com.ags.spring_ecommerce_bff.config.kafka;
 
+import com.ags.spring_ecommerce_bff.dto.request.OrderRequestDto;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +18,9 @@ public class KafkaProducerService {
   @Value("${spring.kafka.topics.order-create}")
   private String orderCreateTopic;
 
-  public void sendOrderCreateMessage(Object message) {
+  public void sendOrderCreateMessage(OrderRequestDto order) {
     CompletableFuture<SendResult<String, Object>> future =
-        kafkaTemplate.send(orderCreateTopic, message);
+        kafkaTemplate.send(orderCreateTopic, order);
 
     future.whenComplete(
         (result, ex) -> {
