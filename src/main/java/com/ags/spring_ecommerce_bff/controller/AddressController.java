@@ -21,10 +21,10 @@ public class AddressController {
 
   @GetMapping
   @Operation(
-      summary = "Get all addresses",
+      summary = "Get all addresses by User ID",
       description = "Fetch a list of all address in the system")
-  public ResponseEntity<List<AddressResponseDto>> getAllAddresses() {
-    var addresses = addressService.getAllAddresses();
+  public ResponseEntity<List<AddressResponseDto>> getAllAddresses(@RequestParam UUID userId) {
+    var addresses = addressService.getAddressesByUserId(userId);
     return ResponseEntity.ok(addresses);
   }
 

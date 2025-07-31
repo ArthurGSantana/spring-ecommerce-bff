@@ -32,10 +32,10 @@ public class AddressService {
     return modelMapper.map(address, AddressResponseDto.class);
   }
 
-  public List<AddressResponseDto> getAllAddresses() {
-    log.info("Fetching all addresses");
+  public List<AddressResponseDto> getAddressesByUserId(UUID userId) {
+    log.info("Fetching all addresses by user ID");
 
-    var addresses = addressRepository.findAll();
+    var addresses = addressRepository.findByUserId(userId);
 
     log.info("Fetched {} addresses successfully", addresses.size());
 
