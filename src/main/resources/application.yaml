@@ -47,8 +47,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
       properties:
-        # Desabilita o cabeçalho 'spring.json.type_id' que o Spring Kafka adiciona por padrão.
-        spring.json.add-type-headers: false
+        spring.json.add.type.headers: false # Para o valor (payload)
+        spring.json.add.type.headers.keys: false # <--- ISSO É CRÍTICO para a CHAVE STRING
 
         # Acks (Acknowledge): Define o nível de garantia de entrega da mensagem.
         # - 0: Produtor não espera por ACK. Mais rápido, menor garantia.
