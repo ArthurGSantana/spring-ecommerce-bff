@@ -64,6 +64,7 @@ spring:
         retry.backoff.ms: 1000 #
     topics:
         order-create: order-create
+        order-update: order-update
 
 springdoc:
   api-docs:
