@@ -47,11 +47,4 @@ public class OrderController {
       orderService.updateOrder(id, orderDto);
       return ResponseEntity.ok().build();
     }
-  //
-  //  @DeleteMapping("{id}")
-  //  @Operation(summary = "Delete order by ID", description = "Remove a order from the system")
-  //  public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
-  //    orderService.deleteOrderById(id);
-  //    return ResponseEntity.noContent().build();
-  //  }
 }
