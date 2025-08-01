@@ -2,11 +2,14 @@ package com.ags.spring_ecommerce_bff.service;
 
 import com.ags.spring_ecommerce_bff.config.kafka.KafkaProducerService;
 import com.ags.spring_ecommerce_bff.dto.request.OrderRequestDto;
+import com.ags.spring_ecommerce_bff.dto.response.OrderItemResponseDto;
 import com.ags.spring_ecommerce_bff.dto.response.OrderResponseDto;
 import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
 import com.ags.spring_ecommerce_bff.repository.OrderRepository;
+
 import java.util.List;
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -35,19 +38,43 @@ public class OrderService {
     return orderDto;
   }
 
-  public List<OrderResponseDto> getAllOrders() {
-    log.info("Fetching all orders");
+  public List<OrderResponseDto> getAllOrdersByUserId(UUID userId) {
+    log.info("Fetching all orders by user ID {}", userId);
 
-    var orders = orderRepository.findAll();
+    var orders = orderRepository.findByUserId(userId);
 
     log.info("Fetched {} orders successfully", orders.size());
 
-    return orders.stream().map(order -> modelMapper.map(order, OrderResponseDto.class)).toList();
+    return orders.stream().map(order -> OrderResponseDto.builder()
+        .id(order.getId())
+        .shippingAddressId(order.getShippingAddress().getId())
+        .items(
+            order.getItems().stream().map(item -> OrderItemResponseDto.builder()
+                .productId(item.getProduct().getId())
+                .quantity(item.getQuantity())
+                .build()).toList()
+        ).build()).toList();
   }
 
   public void createOrder(OrderRequestDto orderDto) {
     log.info("Creating new order");
 
     kafkaProducerService.sendOrderCreateMessage(orderDto);
+  }
+
+  public void updateOrder(UUID orderId, OrderRequestDto orderDto) {
+    log.info("Updating order for order ID {}", orderId);
+
+    var order =
+        orderRepository
+            .existsById(orderId);
+
+    if (!order) {
+      throw new NotFoundException("Order not found");
+    }
+
+    kafkaProducerService.sendOrderCreateMessage(orderDto);
+
+    log.info("Order status updated successfully for order ID {}", orderId);
   }
 }
