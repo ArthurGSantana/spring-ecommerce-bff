@@ -1,12 +1,13 @@
 package com.ags.spring_ecommerce_bff.controller;
 
 import com.ags.spring_ecommerce_bff.dto.request.ProductRequestDto;
+import com.ags.spring_ecommerce_bff.dto.request.ProductRequestFilterDto;
 import com.ags.spring_ecommerce_bff.dto.response.ProductResponseDto;
+import com.ags.spring_ecommerce_bff.dto.response.ProductResponseFilterDto;
 import com.ags.spring_ecommerce_bff.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,25 @@ public class ProductController {
   @Operation(
       summary = "Get all products",
       description = "Fetch a list of all products in the system")
-  public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-    var products = productService.getAllProducts();
+  public ResponseEntity<ProductResponseFilterDto<ProductResponseDto>> getAllProductsByFilter(
+      @RequestParam(required = false) String sku,
+      @RequestParam(required = false) String name,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(required = false) String sortBy,
+      @RequestParam(required = false) String sortOrder) {
+    var filter =
+        ProductRequestFilterDto.builder()
+            .sku(sku)
+            .name(name)
+            .page(page)
+            .size(size)
+            .sortBy(sortBy)
+            .sortOrder(sortOrder)
+            .build();
+
+    var products = productService.getAllProductsByFilter(filter);
+
     return ResponseEntity.ok(products);
   }
 

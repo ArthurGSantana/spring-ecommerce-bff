@@ -1,15 +1,19 @@
 package com.ags.spring_ecommerce_bff.service;
 
 import com.ags.spring_ecommerce_bff.dto.request.ProductRequestDto;
+import com.ags.spring_ecommerce_bff.dto.request.ProductRequestFilterDto;
 import com.ags.spring_ecommerce_bff.dto.response.ProductResponseDto;
+import com.ags.spring_ecommerce_bff.dto.response.ProductResponseFilterDto;
 import com.ags.spring_ecommerce_bff.exception.errors.NotFoundException;
 import com.ags.spring_ecommerce_bff.grpc.ProductGrpcClient;
 import com.ags.spring_ecommerce_bff.repository.ProductRepository;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,14 +39,36 @@ public class ProductService {
     return productDto;
   }
 
-  public List<ProductResponseDto> getAllProducts() {
-    log.info("Fetching all products");
+  public ProductResponseFilterDto<ProductResponseDto> getAllProductsByFilter(
+      ProductRequestFilterDto filter) {
+    log.info("Buscando produtos com filtro: sku={}, name={}", filter.getSku(), filter.getName());
 
-    var products = productRepository.findAll();
+    var sort = Sort.unsorted();
+    if (filter.getSortBy() != null && filter.getSortOrder() != null) {
+      sort =
+          Sort.by(
+              filter.getSortOrder().equalsIgnoreCase("desc")
+                  ? Sort.Direction.DESC
+                  : Sort.Direction.ASC,
+              filter.getSortBy());
+    }
 
-    return products.stream()
-        .map(product -> modelMapper.map(product, ProductResponseDto.class))
-        .toList();
+    Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), sort);
+
+    var productsPage =
+        productRepository.findBySkuContainingIgnoreCaseAndNameContainingIgnoreCase(
+            filter.getSku() == null ? "" : filter.getSku(),
+            filter.getName() == null ? "" : filter.getName(),
+            pageable);
+
+    return ProductResponseFilterDto.<ProductResponseDto>builder()
+        .content(
+            productsPage.getContent().stream()
+                .map(product -> modelMapper.map(product, ProductResponseDto.class))
+                .toList())
+        .totalElements(productsPage.getTotalElements())
+        .totalPages(productsPage.getTotalPages())
+        .build();
   }
 
   public ProductResponseDto createProduct(ProductRequestDto productDto) {
