@@ -1,9 +1,7 @@
 package com.ags.spring_ecommerce_bff.config.kafka;
 
 import com.ags.spring_ecommerce_bff.dto.request.OrderRequestDto;
-
 import java.util.concurrent.CompletableFuture;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

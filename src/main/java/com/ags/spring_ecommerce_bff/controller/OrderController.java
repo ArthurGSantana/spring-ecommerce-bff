@@ -20,7 +20,9 @@ public class OrderController {
   private final OrderService orderService;
 
   @GetMapping
-  @Operation(summary = "Get all orders by User ID", description = "Fetch a list of all order in the system")
+  @Operation(
+      summary = "Get all orders by User ID",
+      description = "Fetch a list of all order in the system")
   public ResponseEntity<List<OrderResponseDto>> getAllOrdersByUserId(@RequestParam UUID userId) {
     var orders = orderService.getAllOrdersByUserId(userId);
     return ResponseEntity.ok(orders);
@@ -40,11 +42,11 @@ public class OrderController {
     return ResponseEntity.ok().build();
   }
 
-    @PutMapping("{id}")
-    @Operation(summary = "Update order by ID", description = "Update an existing order's details")
-    public ResponseEntity<OrderResponseDto> updateOrder(
-        @PathVariable UUID id, @RequestBody OrderRequestDto orderDto) {
-      orderService.updateOrder(id, orderDto);
-      return ResponseEntity.ok().build();
-    }
+  @PutMapping("{id}")
+  @Operation(summary = "Update order by ID", description = "Update an existing order's details")
+  public ResponseEntity<OrderResponseDto> updateOrder(
+      @PathVariable UUID id, @RequestBody OrderRequestDto orderDto) {
+    orderService.updateOrder(id, orderDto);
+    return ResponseEntity.ok().build();
+  }
 }
