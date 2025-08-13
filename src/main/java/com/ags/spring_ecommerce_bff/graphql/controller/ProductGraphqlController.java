@@ -4,7 +4,6 @@ import com.ags.spring_ecommerce_bff.dto.request.ProductRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.ProductResponseDto;
 import com.ags.spring_ecommerce_bff.service.ProductService;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,10 +23,10 @@ public class ProductGraphqlController {
     return productService.getProductById(id);
   }
 
-  @QueryMapping
-  public List<ProductResponseDto> getAllProducts() {
-    return productService.getAllProducts();
-  }
+  //  @QueryMapping
+  //  public List<ProductResponseDto> getAllProducts() {
+  //    return productService.getAllProductsByFilter(new ProductRequestFilterDto());
+  //  }
 
   @MutationMapping
   public ProductResponseDto createProduct(

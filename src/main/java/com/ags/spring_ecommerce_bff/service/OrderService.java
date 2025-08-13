@@ -1,6 +1,7 @@
 package com.ags.spring_ecommerce_bff.service;
 
 import com.ags.spring_ecommerce_bff.config.kafka.KafkaProducerService;
+import com.ags.spring_ecommerce_bff.config.rabbitmq.RabbitMQProducer;
 import com.ags.spring_ecommerce_bff.dto.request.OrderRequestDto;
 import com.ags.spring_ecommerce_bff.dto.response.OrderItemResponseDto;
 import com.ags.spring_ecommerce_bff.dto.response.OrderResponseDto;
@@ -20,6 +21,7 @@ public class OrderService {
   private final OrderRepository orderRepository;
   private final ModelMapper modelMapper;
   private final KafkaProducerService kafkaProducerService;
+  private final RabbitMQProducer rabbitMQProducer;
 
   public OrderResponseDto getOrderById(UUID orderId) {
     log.info("Fetching order with ID {}", orderId);
@@ -66,6 +68,7 @@ public class OrderService {
     log.info("Creating new order");
 
     kafkaProducerService.sendOrderCreateMessage(orderDto);
+    rabbitMQProducer.transferCreateSendMessage(orderDto);
   }
 
   public void updateOrder(UUID orderId, OrderRequestDto orderDto) {
