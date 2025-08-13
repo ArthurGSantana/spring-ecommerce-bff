@@ -66,6 +66,18 @@ spring:
         order-create: order-create
         order-update: order-update
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    exchanges:
+      transfer-create: transfer-create
+    queues:
+      transfer-create: transfer-create
+    bindings:
+      transfer-create: transfer-create
+
 springdoc:
   api-docs:
     path: /v3/api-docs
